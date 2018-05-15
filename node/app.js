@@ -6,7 +6,9 @@ const mongodb = require('mongodb');
 const MongoClient = mongodb.MongoClient;
 const assert = require('assert');
 const url = "mongodb://mongodb:27017";
+const bodyParser = require('body-parser');
 
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static('public'));
 
 app.get("/", function(req, res){
@@ -17,6 +19,15 @@ app.get("/", function(req, res){
 app.get("/editor", function(req, res){
   res.sendFile(__dirname + "/views/editor.html");
   let firstConnectMessage = "new connect";
+});
+
+app.post("/login", function(req, res){
+  res.sendFile(__dirname + "/views/index.html");
+  console.log(req.body);
+});
+
+app.get("/login", function(req, res){
+  res.sendFile(__dirname + "/views/index.html");
 });
 
 app.get("/test/", function(req, res){
