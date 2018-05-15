@@ -7,12 +7,17 @@ const MongoClient = mongodb.MongoClient;
 const assert = require('assert');
 const url = "mongodb://mongodb:27017";
 
+app.use(express.static('public'));
 
 app.get("/", function(req, res){
   res.sendFile(__dirname + "/views/index.html");
   let firstConnectMessage = "new connect";
-  io.emit("new connect", firstConnectMessage);
-  });
+});
+
+app.get("/editor", function(req, res){
+  res.sendFile(__dirname + "/views/editor.html");
+  let firstConnectMessage = "new connect";
+});
 
 app.get("/test/", function(req, res){
   MongoClient.connect(url, (error, client) => {
@@ -28,5 +33,5 @@ app.get("/test/", function(req, res){
 
 http.listen(3000, function () {
   console.log('Example app listening on port 3000!');
-  });
+});
 
