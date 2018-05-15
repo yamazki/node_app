@@ -7,3 +7,14 @@ node:
     - ./node/:/node/
   working_dir: /node
   command: npm start
+  links:
+    - mongodb
+  
+mongodb:
+  container_name: mongodb
+  image: mongo
+  ports:
+    - "27017:27017"
+  volumes:
+    - ./mongodb/:/data/db
+  

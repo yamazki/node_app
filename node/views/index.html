@@ -1,12 +1,29 @@
 <title>Web_Application</title>
 <script src="https://cdn.jsdelivr.net/npm/vue"></script>
 <script src="/socket.io/socket.io.js"></script>
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/push.js/0.0.11/push.min.js"></script>
 <div id="app">
   <p> app name is "{{name}}", message is "{{message}}" </p>
   <p> price is {{priceWithTax}}</p>
 </div>
 
+<script>
+  Push.Permission.request();
+  let socket = io();
+  socket.on("new connect", function (data) {
+    document.write(data[0].name);
+    document.write(data[0].password);
+    Push.create("new user connected", {
+      body: data[0].name,
+      icon: 'icon.png',
+      timeout: 4000,
+      onClick: function () {
+        window.focus();
+        this.close();
+      }
+    });
+  });
+</script>
 
 <script>
 new Vue({
