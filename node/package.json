@@ -15,6 +15,7 @@
     "express": "^4.16.3",
     "mongodb": "^3.1.0-beta4",
     "nodemon": "^1.17.2",
+    "passport": "^0.4.0",
     "push.js": "^1.0.5",
     "socket.io": "^2.1.0",
     "vue": "^2.5.16"

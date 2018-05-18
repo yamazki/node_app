@@ -3,13 +3,13 @@ const app = express();
 const http = require('http').Server(app);
 const io = require('socket.io')(http);
 const mongodb = require('mongodb');
-const MongoClient = mongodb.MongoClient;
-const assert = require('assert');
-const url = "mongodb://mongodb:27017";
 const bodyParser = require('body-parser');
-
+const MongodbClient = require('./lib/mongodb/MongodbClient.js'); 
+  
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static('public'));
+
+let mongodbClient = new MongodbClient();
 
 app.get("/", function(req, res){
   res.sendFile(__dirname + "/views/index.html");
@@ -30,17 +30,21 @@ app.get("/login", function(req, res){
   res.sendFile(__dirname + "/views/index.html");
 });
 
-app.get("/test/", function(req, res){
-  MongoClient.connect(url, (error, client) => {
-    const db = client.db("test");
-    db.collection("user", (err, collection)  => {
-      collection.find().toArray((err, docs) => {
-        io.emit("new connect", docs);
-      });
-    });
-  });
- res.send();
+app.get("/signup", function(req, res){
+  res.sendFile(__dirname + "/views/signup.html");
 });
+
+app.post("/signup", function(req, res){
+  if(mongodbClient.userManager.canAddUser(req.body.userName, req.body.password)) {
+    console.log("user name is add");
+  }
+  else {
+    console.log("user name is used");
+  }
+  res.send();
+});
+
+  
 
 http.listen(3000, function () {
   console.log('Example app listening on port 3000!');
