@@ -5,11 +5,24 @@ const io = require('socket.io')(http);
 const mongodb = require('mongodb');
 const bodyParser = require('body-parser');
 const MongodbClient = require('./lib/mongodb/MongodbClient.js'); 
+const mongodbClient = new MongodbClient();
   
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static('public'));
 
-let mongodbClient = new MongodbClient();
+userRegister = async () => {
+  console.log("root");
+  let result = await mongodbClient.userManager.userNameExists("root")
+  if(result) {
+  console.log("registration fault");
+  }
+  else {
+    await mongodbClient.userManager.userRegisteration("root", "password");
+    console.log("registration successed");
+  }
+};
+
+userRegister();
 
 app.get("/", function(req, res){
   res.sendFile(__dirname + "/views/index.html");
@@ -35,12 +48,7 @@ app.get("/signup", function(req, res){
 });
 
 app.post("/signup", function(req, res){
-  if(mongodbClient.userManager.canAddUser(req.body.userName, req.body.password)) {
-    console.log("user name is add");
-  }
-  else {
-    console.log("user name is used");
-  }
+  mongodbClient.userManager.canAddUser(req.body.userName, req.body.password)
   res.send();
 });
 

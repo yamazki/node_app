@@ -15,8 +15,8 @@ module.exports = class UserManager  {
     this.dbName = dbName;
   }
   /**
-    * ユーザネームがDBに存在しているかの確認
-    * @param userName ユーザネーム
+    * 登録したいユーザネームがDBに存在しているかの確認
+    * @param userName 登録したいユーザネーム
     * @return 存在した場合はtrue
     */
   userNameExists (userName) {
@@ -24,13 +24,18 @@ module.exports = class UserManager  {
       const db = client.db(this.dbName);
       db.collection(collectionName , (err, collection)  => {
         collection.find({name:{$eq:userName}}).toArray((err, docs) => {
+          for (let doc of docs) {
+            console.log(doc.name);
+            if(doc.name == userName) {
+              console.log("user name is used");
+              return true
+            }
+            else {
+              console.log("user name is add");
+              return false
+            }
+          }
           client.close();
-          if(docs.name == userName) {
-            return true;
-          }
-          else {
-            return false;
-          }
         });
       });
     });
@@ -40,24 +45,12 @@ module.exports = class UserManager  {
     * 新規ユーザ登録処理
     * @param userName 登録したいユーザネーム
     * @param password パスワード
-    * @return ユーザ名が存在していた場合にはfalse,存在していなかったら登録処理を行いtrue
     */
-  canAddUser (userName, password) {
+  userRegisteration (userName, password) {
     
     //TODO パスワードハッシュ化
     
-    let promise = new Promise(function(resolve, reject) {
-      let result = check(userName);
-      console.log(result);
-      resolve();
-    });
-    promise.then(function (result) {
-      if(result) {
-        return false;
-      } 
-      else {
-        return true;
-      }
-    });
+    console.log("root");
+    
   }
 }
